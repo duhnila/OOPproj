@@ -1,3 +1,4 @@
+import org.mindrot.jbcrypt.BCrypt;
 import java.util.Objects;
 
 public class AuthViaId extends Authorizer{
@@ -10,7 +11,7 @@ public class AuthViaId extends Authorizer{
 
     public boolean isUserValid(String pass) {
         for (int i = 0; i < database.countLines(); i++) {
-            if (Objects.equals(Database.database[i].getId(), id) && Objects.equals(Database.database[i].getPassword(), pass)) {
+            if (Objects.equals(Database.database[i].getId(), id) && BCrypt.checkpw(pass, Database.database[i].getPassword())) {
                 return true;
             }
         }

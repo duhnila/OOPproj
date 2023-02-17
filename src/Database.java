@@ -1,3 +1,4 @@
+import org.mindrot.jbcrypt.BCrypt;
 import java.sql.*;
 import java.util.Objects;
 import java.util.Scanner;
@@ -15,8 +16,8 @@ public class Database {
     }
 
     public boolean isUserExist(String tempLogin) {
-        for (int i = 0; i < database.length; i++) {
-            if (Objects.equals(tempLogin, database[i].getLogin()) || Objects.equals(database[i].getId(), tempLogin)) {
+        for (User user : database) {
+            if (Objects.equals(tempLogin, user.getLogin()) || Objects.equals(user.getId(), tempLogin)) {
                 return true;
             }
         }
@@ -39,7 +40,7 @@ public class Database {
         }
 
         if (isUserExist(log)) {
-            System.out.println(String.format("\nUser %s with this login or id already exists\n", log));
+            System.out.printf("\nUser %s with this login or id already exists\n%n", log);
             return;
         }
 
@@ -47,6 +48,7 @@ public class Database {
             System.out.print("Enter password: ");
             String pass = myObj.nextLine();
             if (isPassValid(pass)) {
+                String hashed_pass = BCrypt.hashpw(pass, BCrypt.gensalt(14));
                 String ConnectionURL = "jdbc:postgresql://localhost:5432/database";
                 Connection con = null;
                 ResultSet rs = null;
@@ -57,8 +59,8 @@ public class Database {
                     PreparedStatement ps = con.prepareStatement("insert into users (id, login, password) values (?,?,?)");
                     ps.setString(1, id);
                     ps.setString(2, log);
-                    ps.setString(3, pass);
-                    System.out.println(String.format("\nUser %s[%s] successfully registered.\n", log, id));
+                    ps.setString(3, hashed_pass);
+                    System.out.printf("\nUser %s[%s] successfully registered.\n%n", log, id);
                     int row = ps.executeUpdate();
                     updateData();
                 } catch (Exception e) {
@@ -71,14 +73,16 @@ public class Database {
                         System.out.println("Exception occurred!");
                     }
                 }
+            } else {
+                System.out.println("Wrong password format. Try again");
             }
         }
     }
 
     public User getUser(String login) {
-        for (int i = 0; i < database.length; i++) {
-            if (Objects.equals(database[i].getLogin(), login) || Objects.equals(database[i].getId(), login)) {
-                return database[i];
+        for (User user : database) {
+            if (Objects.equals(user.getLogin(), login) || Objects.equals(user.getId(), login)) {
+                return user;
             }
         }
         return database[0];

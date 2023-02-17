@@ -7,9 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="log" />
+        <module name="jbcrypt" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="jbcrypt" target="1.5" />
       <module name="log" target="1.8" />
     </bytecodeTargetLevel>
   </component>
