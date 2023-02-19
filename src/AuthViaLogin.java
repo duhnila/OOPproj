@@ -2,11 +2,11 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.util.Objects;
 
 public class AuthViaLogin extends Authorizer {
-    String login;
+    private String login;
 
-    public AuthViaLogin(String login) {
+    public AuthViaLogin(String log) {
         super();
-        this.login = login;
+        this.login = log;
     }
 
     public boolean isUserValid(String pass) {

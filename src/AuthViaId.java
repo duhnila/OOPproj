@@ -2,7 +2,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import java.util.Objects;
 
 public class AuthViaId extends Authorizer{
-    String id;
+    private String id;
+    private Database database;
 
     public AuthViaId(String id) {
         super();

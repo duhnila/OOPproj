@@ -33,48 +33,50 @@ public class Database {
         while (true) {
             System.out.print("Enter id (must contain 12 digits): ");
             id = myObj.nextLine();
-
             if (!isIdValid(id)) {
                 System.out.println("Wrong ID format. Try again...");
             } else break;
         }
 
-        if (isUserExist(log)) {
+        if (isUserExist(log) || isUserExist(id)) {
             System.out.printf("\nUser %s with this login or id already exists\n%n", log);
             return;
         }
-
         while (true) {
             System.out.print("Enter password: ");
             String pass = myObj.nextLine();
             if (isPassValid(pass)) {
-                String hashed_pass = BCrypt.hashpw(pass, BCrypt.gensalt(14));
-                String ConnectionURL = "jdbc:postgresql://localhost:5432/database";
-                Connection con = null;
-                ResultSet rs = null;
-                Statement st = null;
-                try {
-                    Class.forName("org.postgresql.Driver");
-                    con = DriverManager.getConnection(ConnectionURL, "postgres", "fu99kkkopl");
-                    PreparedStatement ps = con.prepareStatement("insert into users (id, login, password) values (?,?,?)");
-                    ps.setString(1, id);
-                    ps.setString(2, log);
-                    ps.setString(3, hashed_pass);
-                    System.out.printf("\nUser %s[%s] successfully registered.\n%n", log, id);
-                    int row = ps.executeUpdate();
-                    updateData();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                } finally {
-                    try {
-                        con.close();
-                        break;
-                    } catch (Exception e) {
-                        System.out.println("Exception occurred!");
-                    }
-                }
+                addToDatabase(log, id, pass);
+                updateData();
+                System.out.printf("\nUser %s[%s] successfully registered.\n%n", log, id);
             } else {
                 System.out.println("Wrong password format. Try again");
+            }
+        }
+    }
+
+    public void addToDatabase(String login, String id, String password) {
+        String hashed_pass = BCrypt.hashpw(password, BCrypt.gensalt(14));
+        String ConnectionURL = "jdbc:postgresql://localhost:5432/database";
+        Connection con = null;
+        ResultSet rs = null;
+        Statement st = null;
+        try {
+            Class.forName("org.postgresql.Driver");
+            con = DriverManager.getConnection(ConnectionURL, "postgres", "fu99kkkopl");
+            PreparedStatement ps = con.prepareStatement("insert into users (id, login, password) values (?,?,?)");
+            ps.setString(1, id);
+            ps.setString(2, login);
+            ps.setString(3, hashed_pass);
+            int row = ps.executeUpdate();
+            updateData();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                con.close();
+            } catch (Exception e) {
+                System.out.println("Exception occurred!");
             }
         }
     }

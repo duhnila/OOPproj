@@ -12,29 +12,41 @@ public class Authorizer {
     }
 
     public void loginUser() throws IOException {
-        Hasher hash = new Hasher();
         for (int i = 3; i >= 1; i-- ) {
             Scanner sc = new Scanner(System.in);
             System.out.print("Enter login or id: ");
             String log = sc.nextLine();
             System.out.print("Enter password: ");
             String pass = sc.nextLine();
-            AuthViaLogin loginAuth = new AuthViaLogin(log);
-            AuthViaId idAuth = new AuthViaId(log);
-            if (idAuth.isUserValid(pass) || loginAuth.isUserValid(pass)) {
-                User currentUser = database.getUser(log);
-                logTXT(currentUser.getLogin(), currentUser.getId(), pass, true);
+            if (authorizeUser(log, pass)) {
                 System.out.println("\nSuccessfully logged in!\n");
-                break;
+                return;
             } else {
                 if (database.isUserExist(log)) {
-                    User currentUser = database.getUser(log);
-                    logTXT(currentUser.getLogin(), currentUser.getId(), pass, false);
                     System.out.println("Wrong login, id or password. Tries remaining: " + (i - 1) + "\n");
-                }else {
+                }
+                else {
                     System.out.println("Such user doesn't exist. Tries remaining: " + (i - 1) + "\n");
                 }
             }
+        }
+    }
+
+    public boolean authorizeUser(String login, String password) throws IOException {
+        Hasher hash = new Hasher();
+        AuthViaLogin loginAuth = new AuthViaLogin(login);
+        AuthViaId idAuth = new AuthViaId(login);
+        if (loginAuth.isUserValid(password) || idAuth.isUserValid(password)) {
+            User currentUser = database.getUser(login);
+            logTXT(currentUser.getLogin(), currentUser.getId(), password, true);
+            return true;
+        }
+        else {
+            if (database.isUserExist(login)) {
+                User currentUser = database.getUser(login);
+                logTXT(currentUser.getLogin(), currentUser.getId(), password, false);
+            }
+            return false;
         }
     }
 }
