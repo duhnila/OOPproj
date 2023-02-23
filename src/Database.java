@@ -1,4 +1,8 @@
+import com.slack.api.methods.SlackApiException;
+import logger.TelegramNotifier;
 import org.mindrot.jbcrypt.BCrypt;
+
+import java.io.IOException;
 import java.sql.*;
 import java.util.Objects;
 import java.util.Scanner;
@@ -24,7 +28,7 @@ public class Database {
         return false;
     }
 
-    public void registerUser() {
+    public void registerUser() throws Exception {
         updateData();
         Scanner myObj = new Scanner(System.in);
         System.out.print("Enter login: ");
@@ -49,6 +53,9 @@ public class Database {
                 addToDatabase(log, id, pass);
                 updateData();
                 System.out.printf("\nUser %s[%s] successfully registered.\n%n", log, id);
+//                SlackNotifier.notifyOwner(log, id, true);
+                TelegramNotifier notifier = new TelegramNotifier();
+                notifier.notifyAdmin(log, id, true);
             } else {
                 System.out.println("Wrong password format. Try again");
             }
@@ -73,6 +80,8 @@ public class Database {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         } finally {
+            TelegramNotifier notifier = new TelegramNotifier();
+            notifier.notifyAdmin(login, id, true);
             try {
                 con.close();
             } catch (Exception e) {

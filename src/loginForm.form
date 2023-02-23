@@ -3,10 +3,13 @@
   <grid id="27dc6" binding="loginPanel" layout-manager="GridLayoutManager" row-count="10" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="10" vgap="10">
     <margin top="50" left="100" bottom="50" right="100"/>
     <constraints>
-      <xy x="-2" y="4" width="1022" height="965"/>
+      <xy x="-2" y="4" width="643" height="485"/>
     </constraints>
     <properties>
+      <background color="-12828863"/>
       <enabled value="true"/>
+      <font/>
+      <foreground color="-8881283"/>
     </properties>
     <border type="line">
       <color color="-4473925"/>
@@ -14,10 +17,15 @@
     <children>
       <component id="57a0" class="javax.swing.JLabel">
         <constraints>
-          <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+          <grid row="1" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false">
+            <preferred-size width="110" height="64"/>
+          </grid>
         </constraints>
         <properties>
           <font name="JetBrains Mono" size="16" style="1"/>
+          <foreground color="-1"/>
+          <horizontalAlignment value="0"/>
+          <horizontalTextPosition value="0"/>
           <text value="Login or ID"/>
         </properties>
       </component>
@@ -27,6 +35,7 @@
         </constraints>
         <properties>
           <font name="JetBrains Mono" size="16" style="1"/>
+          <foreground color="-1"/>
           <text value="Password"/>
         </properties>
       </component>
@@ -37,7 +46,9 @@
             <maximum-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <foreground color="-16777216"/>
+        </properties>
       </component>
       <component id="e22eb" class="javax.swing.JButton" binding="loginButton" default-binding="true">
         <constraints>
@@ -47,6 +58,9 @@
           </grid>
         </constraints>
         <properties>
+          <background color="-8748669"/>
+          <font swing-font="Button.font"/>
+          <foreground color="-1"/>
           <text value="Login"/>
         </properties>
       </component>
@@ -59,6 +73,7 @@
         </constraints>
         <properties>
           <font name="JetBrains Mono"/>
+          <foreground color="-16777216"/>
           <text value=""/>
         </properties>
       </component>
@@ -68,6 +83,7 @@
         </constraints>
         <properties>
           <font name="JetBrains Mono" size="24"/>
+          <foreground color="-1"/>
           <text value="Sign in"/>
         </properties>
       </component>
@@ -79,6 +95,8 @@
           </grid>
         </constraints>
         <properties>
+          <background color="-8748669"/>
+          <foreground color="-1"/>
           <text value="Register"/>
         </properties>
       </component>
@@ -88,6 +106,7 @@
         </constraints>
         <properties>
           <font name="JetBrains Mono" size="16" style="1"/>
+          <foreground color="-1"/>
           <text value="or"/>
         </properties>
       </component>
@@ -97,6 +116,7 @@
         </constraints>
         <properties>
           <font name="JetBrains Mono" size="10" style="1"/>
+          <foreground color="-1"/>
           <horizontalAlignment value="0"/>
           <horizontalTextPosition value="0"/>
           <text value="if you haven't signed up yet"/>

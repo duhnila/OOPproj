@@ -1,3 +1,5 @@
+import com.slack.api.methods.SlackApiException;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,12 +15,13 @@ public class LoginForm extends JDialog {
     private int triesCounter = 3;
     private static Database database = new Database();
     private static boolean isLogged = false;
+    private static String userName;
 
     public LoginForm(JFrame parent) {
         super(parent);
         setTitle("Sign in");
         setContentPane(loginPanel);
-        setMinimumSize(new Dimension(450, 474));
+        setMinimumSize(new Dimension(500, 550));
         setModal(true);
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -34,6 +37,10 @@ public class LoginForm extends JDialog {
                             dispose();
                         }
                     } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (SlackApiException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (Exception ex) {
                         throw new RuntimeException(ex);
                     }
                 }
@@ -54,13 +61,14 @@ public class LoginForm extends JDialog {
         setVisible(true);
     }
 
-    private boolean loginUser(int attempts) throws IOException {
+    private boolean loginUser(int attempts) throws Exception {
         String login = loginField.getText();
         String password = String.valueOf(passwordField.getPassword());
         Authorizer myAuth = new Authorizer();
         if (myAuth.authorizeUser(login, password)) {
             JOptionPane.showMessageDialog(LoginForm.this, String.format("Hello, %s", login), "SUCCESSFUL", JOptionPane.DEFAULT_OPTION);
             isLogged = true;
+            userName = login;
             return true;
         }
         else {
@@ -72,7 +80,7 @@ public class LoginForm extends JDialog {
     public static void main(String[] args) {
         LoginForm myForm = new LoginForm(null);
         if (isLogged) {
-            System.out.println("User logged in");
+            System.out.printf("%s logged in%n", userName);
         }
     }
 }

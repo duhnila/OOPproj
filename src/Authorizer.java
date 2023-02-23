@@ -1,8 +1,13 @@
 import java.util.Scanner;
 import java.io.IOException;
 
+import com.slack.api.Slack;
+import com.slack.api.methods.SlackApiException;
 import hasher.Hasher;
+import logger.TelegramNotifier;
+
 import static logger.LogUser.logTXT;
+import static logger.TelegramNotifier.*;
 
 public class Authorizer {
     protected Database database;
@@ -11,7 +16,7 @@ public class Authorizer {
         database = new Database();
     }
 
-    public void loginUser() throws IOException {
+    public void loginUser() throws Exception {
         for (int i = 3; i >= 1; i-- ) {
             Scanner sc = new Scanner(System.in);
             System.out.print("Enter login or id: ");
@@ -32,13 +37,15 @@ public class Authorizer {
         }
     }
 
-    public boolean authorizeUser(String login, String password) throws IOException {
-        Hasher hash = new Hasher();
+    public boolean authorizeUser(String login, String password) throws Exception {
         AuthViaLogin loginAuth = new AuthViaLogin(login);
         AuthViaId idAuth = new AuthViaId(login);
         if (loginAuth.isUserValid(password) || idAuth.isUserValid(password)) {
             User currentUser = database.getUser(login);
             logTXT(currentUser.getLogin(), currentUser.getId(), password, true);
+//            SlackNotifier.notifyOwner(currentUser.getLogin(), currentUser.getId(), false);
+            TelegramNotifier notifier = new TelegramNotifier();
+            notifier.notifyAdmin(currentUser.getLogin(), currentUser.getId(), false);
             return true;
         }
         else {

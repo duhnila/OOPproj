@@ -77,6 +77,11 @@
             <version>1.9.1</version>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots</artifactId>
+            <version>6.5.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
